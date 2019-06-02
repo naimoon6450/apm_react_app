@@ -16,12 +16,6 @@ const seed = () => {
             Product.create({name: 'React'}),
         ]
         return Promise.all(arrUsersProds)
-        .then(result => {
-            const [nai, nod, reac, siraprod, nodprod, reacprod] = result;
-            siraprod.setManager(nai);
-            nodprod.setManager(nod);
-            reacprod.setManager(reac);
-        })
     })
     .then(() => {
         console.log('Database seeded ...');
@@ -29,7 +23,4 @@ const seed = () => {
     .catch(e => console.error(e))
 }
 
-seed().finally(() => {
-    console.log('closing db ...')
-    db.close();
-})
+seed()
