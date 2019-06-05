@@ -1,23 +1,17 @@
 import React from 'react';
+import Manager from './Managers';
 
 const SingleProduct = (props) => {
     const prod = props.prod;
-    const managers = props.managers
+    const managers = props.managers;
+    const selectedMU = props.selectedMU;
+    const saveManager = props.saveManager;
     return(
-        <div key={prod.id}><li className='list-group-item'>
-            <h6>{prod.name}</h6>
-            <div className='form-group'>
-                <label><em>Product Manager</em></label>
-                <select name='managerId' className='form-control'>
-                    <option>-- None --</option>
-                    {managers.map(pm => {
-                        return <option key={pm.id}>{pm.name}</option>
-                    })}
-                </select>
-            </div>
-            <button className='btn btn-primary'>Save</button>
+        <div key={prod.id}>
+            <li className='list-group-item'>
+                <h6>{prod.name}</h6>
+                    <Manager managers={managers} selectedMU={selectedMU} prod={prod} saveManager={saveManager} />
             </li>
-            <br></br>
         </div>
     )
 }

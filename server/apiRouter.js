@@ -16,13 +16,28 @@ apiRouter.get('/products', (req, res) => {
 })
 
 // this will make the associations so we can initiate the state as such
-apiRouter.put('/products/:id', (req, res) => {
+apiRouter.post('/products', (req, res) => {
     // make the manager associated to this id?
-    const prodId = parseInt(req.params.id, 10);
-    // maybe there will be a body item that will contain the relevant manager that was inserted in the form
-    // const manager = req.body with some data about the manager
+    // console.log(req.body);
+    let manager = req.body.manager;
+    const prodId = parseInt(req.body.prodId);
+    // if manager is none, change managerId to null otherwise change to user selected
+    // if (isNaN(manager)) {
+        
+    // } else {
     
-    // supposed to be updating something here probably product so it has the appropriate manager
+    Promise.all([Product.findByPk(prodId), User.findAll({where: {name: manager}})])
+    .then(([product, user]) => {
+        if (!user[0]) {
+            product.update({managerId: null});
+            console.log('Nullified manager')
+        } else {
+            product.setManager(user[0])
+            console.log('Successfully added manager to db!')
+        }
+    })
+    .catch(e => console.error(e))
+    // }
     
 })
 
