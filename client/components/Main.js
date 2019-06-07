@@ -27,6 +27,7 @@ class Home extends Component {
       return result.json();
     })
     .then(prods => {
+      console.log(prods)
       this.setState({products: prods});
     })
     .catch(e => console.error(e));
@@ -40,7 +41,7 @@ class Home extends Component {
       this.setState({managers: pm});
     })
     .catch(e => console.error(e));
-    
+
   }
 
 
@@ -72,7 +73,7 @@ class Home extends Component {
         manager: `${this.state.selectedManager}`
       })
     })
-    .then(res => res.json())
+    .then(data => data.json())
     .catch(e => console.error(e))
   }
 
@@ -93,9 +94,9 @@ class Home extends Component {
           ? <Products products={this.state.products} managers={this.state.managers} selectedManagerUpdate={this.selectedManagerUpdate} saveManager={this.saveManager} />
           : ''
         }
-        
+
       </div>
-      
+
     );
   }
 }

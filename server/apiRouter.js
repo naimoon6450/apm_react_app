@@ -21,24 +21,19 @@ apiRouter.post('/products', (req, res) => {
     // console.log(req.body);
     let manager = req.body.manager;
     const prodId = parseInt(req.body.prodId);
-    // if manager is none, change managerId to null otherwise change to user selected
-    // if (isNaN(manager)) {
-        
-    // } else {
-    
+
     Promise.all([Product.findByPk(prodId), User.findAll({where: {name: manager}})])
     .then(([product, user]) => {
         if (!user[0]) {
             product.update({managerId: null});
-            console.log('Nullified manager')
+            res.send('Nullified manager')
         } else {
             product.setManager(user[0])
-            console.log('Successfully added manager to db!')
+            res.send('Successfully added manager to db!')
         }
     })
     .catch(e => console.error(e))
-    // }
-    
+
 })
 
 module.exports = apiRouter;
