@@ -5,16 +5,19 @@ const Managers = (props) => {
     const selectedMU = props.selectedMU;
     const prod = props.prod;
     const saveManager = props.saveManager;
+    let defaultVal;
+    managers.map(pm => {
+        if (prod.managerId && prod.managerId === pm.id) defaultVal = pm.name;
+    })
     return (
         <div>
             <div className='form-group'>
             <label><em>Product Manager</em></label>
-            <select id='managerId' className='form-control' onChange={(selected) => {
-                selectedMU(selected.target.value)
-            }} >
+            <select id='managerId' defaultValue={prod.managerId ? defaultVal : ''} className='form-control' onChange={(selected) => {
+                selectedMU(selected.target.value)}} >
                 <option>-- None --</option>
                 {managers.map(pm => {
-                    return <option key={pm.id}>{pm.name}</option>
+                    return <option key={pm.id} value={pm.name} >{pm.name}</option>
                 })}
             </select>
             </div>

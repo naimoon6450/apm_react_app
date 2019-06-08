@@ -6,6 +6,7 @@ const SingleProduct = (props) => {
     const managers = props.managers;
     const selectedMU = props.selectedMU;
     const saveManager = props.saveManager;
+    const currMan = props.currMan
     return(
         <div key={prod.id}>
             <li className='list-group-item'>

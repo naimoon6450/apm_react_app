@@ -9,29 +9,49 @@ class Home extends Component {
     super()
     this.state = {
       selectedNav: 'Home',
-      currentManager: '',
       selectedManager: '',
       products: [],
       managers: [],
+      prodJoinManager: [],
     }
 
     this.navbarUpdate = this.navbarUpdate.bind(this);
     this.selectedManagerUpdate = this.selectedManagerUpdate.bind(this);
     this.saveManager = this.saveManager.bind(this);
+    this.refreshManager = this.refreshManager.bind(this);
+    this.refreshProds = this.refreshProds.bind(this);
   }
 
   componentDidMount() {
+    this.refreshManager();
+    this.refreshProds();
+    
+    fetch('/api/products/withusers', {method: 'GET'})
+    .then(result => {
+      return result.json();
+    })
+    .then(prods => {
+      console.log(prods)
+      this.setState({prodJoinManager: prods});
+    })
+    .catch(e => console.error(e));
+  }
+
+  refreshManager() {
     // fetch the data on products
     fetch('/api/products', {method: 'GET'})
     .then(result => {
       return result.json();
     })
     .then(prods => {
-      console.log(prods)
+      // console.log(prods)
       this.setState({products: prods});
     })
     .catch(e => console.error(e));
 
+  }
+
+  refreshProds() {
     // fetch data on managers
     fetch('/api/users', {method: 'GET'})
     .then(result => {
@@ -41,9 +61,7 @@ class Home extends Component {
       this.setState({managers: pm});
     })
     .catch(e => console.error(e));
-
   }
-
 
   navbarUpdate(selectedNav) {
     this.setState({selectedNav: selectedNav})
@@ -73,10 +91,12 @@ class Home extends Component {
         manager: `${this.state.selectedManager}`
       })
     })
-    .then(data => data.json())
-    .catch(e => console.error(e))
+    .then(() => {
+      this.refreshManager();
+      this.refreshProds();
+    })
+    .catch(e => console.error(e));
   }
-
   render() {
     return (
       <div className="container">
@@ -92,6 +112,14 @@ class Home extends Component {
         }
         {this.state.selectedNav === 'Products'
           ? <Products products={this.state.products} managers={this.state.managers} selectedManagerUpdate={this.selectedManagerUpdate} saveManager={this.saveManager} />
+          : ''
+        }
+        {
+          this.state.selectedNav === 'Managers'
+          ? <div><ul>{this.state.prodJoinManager.map(prod => {
+            return <li key={prod.id}>{prod.managerId ? prod.manager.name : ''}</li>
+          })}</ul>
+            </div>
           : ''
         }
 

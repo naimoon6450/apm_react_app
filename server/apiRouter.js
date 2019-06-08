@@ -15,6 +15,13 @@ apiRouter.get('/products', (req, res) => {
     })
 })
 
+apiRouter.get('/products/withusers', (req, res) => {
+    Product.findAll({include: [{model: User, as: 'manager'}]})
+    .then(prods => {
+        res.send(prods);
+    })
+})
+
 // this will make the associations so we can initiate the state as such
 apiRouter.post('/products', (req, res) => {
     // make the manager associated to this id?
